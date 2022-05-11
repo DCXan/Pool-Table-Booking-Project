@@ -42,12 +42,15 @@ Your Selection: """)
 
     elif choice == '2':
 
-        print("\nViewing All UNOCCUPIED Tables\n")
+        print("\nViewing All AVAILABLE Tables\n")
 
         for table in tables:
 
             if table.occupied == False:
                 print(f"{table.name}")
+
+            else:
+                print("No tables")
 
         try:
             index = int(input("\nEnter Table # to check out: ")) - 1
@@ -88,4 +91,4 @@ Your Selection: """)
         break
 
     else:
-        print("\nInput not recognized. Please enter a valid selection...")
+        print("\nInput not recognized. Please enter a valid selection.")
