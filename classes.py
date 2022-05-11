@@ -1,4 +1,6 @@
 import datetime
+import time
+
 
 class PoolTable:
     def __init__(self, table_number):
