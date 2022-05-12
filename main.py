@@ -1,6 +1,7 @@
 from classes import *
 import datetime
 
+
 print("Welcome to the UH Pool Table Booking App!")
 
 ##### ONLY EDIT THIS IF THE NUMBER OF TABLES CHANGES #####
@@ -34,10 +35,12 @@ Your Selection: """)
         for table in tables:
 
             if table.occupied == False:
-                print(f"{table.name}: AVAILABLE")
+                print(f"{table.name}: \tAVAILABLE")
 
             if table.occupied == True:
-                print(f"{table.name}: OCCUPIED")
+                current_time = datetime.datetime.now().replace(microsecond = 0)
+                duration = current_time - table.startTime
+                print(f"{table.name}: \tOCCUPIED | Check out time: {table.startTime} | Time played: {duration}")
 
 
     elif choice == '2':
@@ -49,18 +52,21 @@ Your Selection: """)
             if table.occupied == False:
                 print(f"{table.name}")
 
-            else:
-                print("No tables")
-
         try:
             index = int(input("\nEnter Table # to check out: ")) - 1
-            table = tables[index]
 
-            if table.occupied:
-                print(f"\n{table.name} has already been checked out. Please choose a different table.")
+            if index >= len(tables):
+                print("\nPlease enter a valid Table number.")
+
             else:
-                table.check_out()
-                print(f"\n{table.name} checked out at {table.startTime}.")
+                table = tables[index]
+
+                if table.occupied == True:
+                    print(f"\n{table.name} is currently occupied. Please choose a different table.")
+
+                else:
+                    table.check_out()
+                    print(f"\n{table.name} checked out at {table.startTime}.")
 
         except ValueError:
             print("\nPlease enter a valid Table number.")
@@ -75,17 +81,34 @@ Your Selection: """)
             if table.occupied == True:
                 print(f"{table.name}")
 
-        index = int(input("\nEnter Table # to check in: ")) - 1
-        table = tables[index]
+        try:
+            index = int(input("\nEnter Table # to check in: ")) - 1
 
-        if table.occupied == False:
-            print(f"\n{table.name} is not currently checked out.")
+            if index >= len(tables):
+                print("\nPlease enter a valid Table number.")
 
-        else:
-            table.check_in()
-            duration = table.endTime - table.startTime
-            print(f"\n{table.name} checked in at {table.endTime}. Total time played is {duration}.")
+            else:
+                table = tables[index]
 
+                if table.occupied == False:
+                    print(f"\n{table.name} is not currently checked out.")
+
+                else:
+                    table.check_in()
+                    duration = table.endTime - table.startTime
+                    print(f"\n{table.name} checked in at {table.endTime}. Total time played is {duration}.")
+
+                    today = datetime.date.today()
+                    with open(f"{today}.txt", "a") as file:
+                        file.write(f"""
+    {table.name}
+    Start time: {table.startTime}
+    End time: {table.endTime}
+    Duration: {duration}
+    """)
+
+        except ValueError:
+            print("\nPlease enter a valid Table number.")
 
     elif choice == 'q':
         break
