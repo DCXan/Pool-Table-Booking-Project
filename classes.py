@@ -1,6 +1,4 @@
 import datetime
-import time
-
 
 class PoolTable:
     def __init__(self, table_number):
@@ -9,6 +7,7 @@ class PoolTable:
         self.startTime = None
         self.endTime = None
         self.totalTime = None
+        self.cost = 0
 
     def check_out(self):
         self.occupied = True

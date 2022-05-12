@@ -1,21 +1,25 @@
 from classes import *
-import datetime
-
 
 print("Welcome to the UH Pool Table Booking App!")
 
 ##### ONLY EDIT THIS IF THE NUMBER OF TABLES CHANGES #####
 
 number_of_tables = 12
+cost_per_hour = 30
+
+##### ONLY EDIT THIS IF THE NUMBER OF TABLES CHANGES #####
+
+#Create Pool Table objects with PoolTable class and add each to the tables list
+
 tables = []
 
 for i in range(1, number_of_tables + 1):
     table = PoolTable(i)
     tables.append(table)
 
-##### ONLY EDIT THIS IF THE NUMBER OF TABLES CHANGES #####
-
 while True:
+
+#Present user with a main menu
 
     choice = input("""
 Please make a selection from the main menu.
@@ -27,6 +31,7 @@ Q - Quit Application
 
 Your Selection: """)
 
+    #Option 1: Allow user to view all tables and their status. If the table is 
 
     if choice == '1':
 
@@ -95,17 +100,24 @@ Your Selection: """)
 
                 else:
                     table.check_in()
-                    duration = table.endTime - table.startTime
-                    print(f"\n{table.name} checked in at {table.endTime}. Total time played is {duration}.")
 
+                    duration = table.endTime - table.startTime
+                    minutes = duration.total_seconds() / 60
+                    rounded_hours = (15 - (minutes % 15) + minutes) / 60
+                    total_cost = format(rounded_hours * cost_per_hour, '.2f')
+
+                    print(f"\n{table.name} checked in at {table.endTime}. Total time played is {duration}.")
+                    print(f"Total amount due is ${total_cost}.")
+                    
                     today = datetime.date.today()
                     with open(f"{today}.txt", "a") as file:
                         file.write(f"""
-    {table.name}
-    Start time: {table.startTime}
-    End time: {table.endTime}
-    Duration: {duration}
-    """)
+{table.name}
+Start time: {table.startTime}
+End time: {table.endTime}
+Duration: {duration}
+Cost: ${total_cost}
+                        """)
 
         except ValueError:
             print("\nPlease enter a valid Table number.")
